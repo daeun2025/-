@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>오늘의 금전운 | 스케치노트 스타일 테스트</title>
+<style>
+  :root {
+    --paper: #fffdf7;
+    --paper-deep: #fff7df;
+    --ink: #161616;
+    --ink-soft: #3b332b;
+    --muted: #766f64;
+    --line: #191919;
+    --yellow: #ffd86b;
+    --blue: #8fd3ff;
+    --pink: #ff9db5;
+    --green: #a7e8b2;
+    --purple: #c6b3ff;
+    --orange: #ffb36b;
+    --primary: #161616;
+    --primary-light: #fff0a8;
+    --primary-hover: #000;
+    --text-main: #161616;
+    --text-muted: #6d665e;
+    --border-color: #161616;
+    --gold: #ffd86b;
+    --rose: #e84f71;
+    --rose-light: #ffe5ea;
+    --card-bg: #fffdf7;
+    --radius-xl: 20px;
+    --radius-lg: 16px;
+    --radius-md: 13px;
+    --radius-sm: 10px;
+    --shadow-soft: 5px 5px 0 rgba(22,22,22,0.92);
+    --shadow-button: 4px 4px 0 rgba(22,22,22,0.92);
+    --transition: all 0.18s ease;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, -apple-system, sans-serif; letter-spacing: -0.3px; }
+  html, body { margin: 0; padding: 0; color: var(--ink); min-height: 100vh; background: var(--paper); }
+  body:before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .35;
+    background:
+      radial-gradient(circle at 14px 14px, rgba(22,22,22,.08) 1.1px, transparent 1.2px) 0 0/28px 28px,
+      linear-gradient(90deg, transparent 97%, rgba(22,22,22,.04) 98%) 0 0/36px 36px;
+  }
+  body:after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .22; mix-blend-mode: multiply;
+    background-image: repeating-linear-gradient(0deg, rgba(0,0,0,.025) 0 1px, transparent 1px 4px);
+  }
+
+  .wrap { max-width: 480px; margin: 0 auto; padding: 26px 18px 60px; position: relative; }
+  .wrap:before, .wrap:after { content:""; position:absolute; border:2px solid var(--line); border-radius:50%; background:var(--yellow); box-shadow:2px 2px 0 var(--line); }
+  .wrap:before { width:18px; height:18px; top:26px; left:20px; transform:rotate(-12deg); }
+  .wrap:after { width:13px; height:13px; top:70px; right:25px; background:var(--blue); transform:rotate(16deg); }
+
+  .hero { text-align: center; padding: 24px 0 12px; position: relative; }
+  .orb { width: 82px; height: 82px; margin: 0 auto 14px; display: grid; place-items: center; font-size: 52px; background: #fff; border: 3px solid var(--line); border-radius: 48% 52% 45% 55%; box-shadow: var(--shadow-soft); transform: rotate(-4deg); animation: doodleFloat 3.2s ease-in-out infinite; }
+  @keyframes doodleFloat { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-7px) rotate(3deg); } }
+  h1 { display:inline-block; margin: 0 0 10px; padding: 2px 10px 5px; font-size: 31px; font-weight: 950; color: var(--ink); line-height: 1.25; background: linear-gradient(transparent 56%, var(--yellow) 56%); transform: rotate(-1.2deg); }
+  .subtitle { margin: 0; color: var(--ink-soft); font-size: 15px; font-weight: 800; }
+  .tagline { display: inline-block; margin-top: 14px; padding: 6px 14px; border-radius: 99px; background: var(--blue); border: 2px solid var(--line); font-size: 11px; color: var(--ink); font-weight: 950; letter-spacing: 1px; box-shadow: 3px 3px 0 var(--line); transform: rotate(1deg); }
+
+  .panel { position: relative; background: rgba(255,253,247,.96); border-radius: 22px 18px 24px 17px; padding: 28px 20px; box-shadow: var(--shadow-soft); margin-top: 25px; border: 3px solid var(--line); }
+  .panel:before { content:""; position:absolute; left:22px; right:22px; top:-11px; height:18px; background: rgba(255,216,107,.82); border:2px solid var(--line); transform: rotate(-1.2deg); border-radius:3px; }
+  .panel h2 { margin: 0 0 16px; font-size: 18px; font-weight: 950; display: flex; align-items: center; gap: 8px; color: var(--ink); }
+  .stepBadge { font-size: 11px; background: var(--pink); color: var(--ink); padding: 5px 10px; border: 2px solid var(--line); border-radius: 50px; font-weight: 950; box-shadow: 2px 2px 0 var(--line); transform: rotate(-2deg); }
+  .stepNote { margin: -4px 0 22px; color: var(--muted); font-size: 13.5px; line-height: 1.55; font-weight: 700; }
+
+  label { display: block; font-size: 13px; color: var(--ink); font-weight: 950; margin-bottom: 8px; padding-left: 2px; }
+  input, select { width: 100%; border: 2.5px solid var(--line); background: #fff; color: var(--ink); border-radius: 14px 12px 16px 11px; padding: 14px 15px; font-size: 15px; outline: none; transition: var(--transition); font-weight: 800; box-shadow: 3px 3px 0 rgba(22,22,22,.9); }
+  input:focus, select:focus { background: #fffef3; transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--yellow); }
+  input::placeholder { color: #9c9488; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .moneyInput { position: relative; margin-bottom: 16px; }
+  .moneyInput span { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--ink); font-size: 15px; font-weight: 950; background: var(--green); border: 2px solid var(--line); border-radius: 999px; padding: 2px 8px; }
+  .moneyInput input { padding-right: 58px; font-weight: 950; }
+  .err { min-height: 20px; color: var(--rose); font-size: 13.5px; text-align: center; margin-top: 12px; font-weight: 900; }
+
+  .cta, .ghost, .saveBtn, .compareBtn { border: 2.5px solid var(--line); box-shadow: var(--shadow-button); transition: var(--transition); }
+  .cta { width: 100%; border-radius: 17px 14px 18px 13px; padding: 16px; font-size: 16px; font-weight: 950; color: var(--ink); cursor: pointer; background: var(--yellow); }
+  .cta:hover, .saveBtn:hover { transform: translate(-2px,-2px) rotate(-.4deg); box-shadow: 6px 6px 0 var(--line); background: #ffe077; }
+  .cta:active, .ghost:active, .saveBtn:active, .compareBtn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--line); }
+  .ghost { width: 100%; margin-top: 12px; background: #fff; color: var(--ink-soft); border-radius: 16px; padding: 14px; font-size: 14px; font-weight: 900; cursor: pointer; }
+  .ghost:hover { background: var(--blue); color: var(--ink); transform: rotate(.3deg); }
+
+  .tarotBox { background: #fff8dc; border-radius: 19px 15px 22px 14px; padding: 18px; margin-bottom: 20px; border: 2.5px dashed var(--line); }
+  .tarotHead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .tarotHead b { font-size: 14px; color: var(--ink); font-weight: 950; }
+  .tarotHead small { color: var(--ink); font-weight: 950; font-size: 13px; background: var(--green); padding: 4px 10px; border-radius: 20px; border: 2px solid var(--line); }
+  .deck { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; perspective: 1000px; }
+  .tcard { height: 100px; border: 2.5px solid var(--line); border-radius: 13px 10px 15px 11px; cursor: pointer; position: relative; transition: var(--transition); background: #fff; box-shadow: 3px 3px 0 var(--line); overflow: hidden; transform-style: preserve-3d; }
+  .tcard:nth-child(3n+1){ background: #fff3a9; transform: rotate(-1.2deg); }
+  .tcard:nth-child(3n+2){ background: #e4f5ff; transform: rotate(.8deg); }
+  .tcard:nth-child(3n){ background: #ffe4ec; transform: rotate(-.4deg); }
+  .tcard:before { content: ""; position: absolute; inset: 7px; border: 2px dashed rgba(22,22,22,.42); border-radius: 8px; }
+  .tcard:after { content: "✦"; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-size: 22px; color: var(--ink); transition: var(--transition); }
+  .tcard:hover { transform: translateY(-5px) rotate(2deg); box-shadow: 5px 5px 0 var(--line); }
+  .tcard.selected { background: var(--green); border-color: var(--line); transform: scale(1.03) rotateY(180deg); }
+  .tcard.selected:after { content: attr(data-icon); font-size: 28px; transform: translate(-50%, -50%) rotateY(180deg); }
+  .selectedList { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; min-height: 30px; justify-content: center; }
+  .chip { display: inline-flex; align-items: center; justify-content: center; padding: 5px 10px; border-radius: 99px; background: var(--paper); border: 2px solid var(--line); color: var(--ink); font-size: 12px; font-weight: 950; box-shadow: 2px 2px 0 var(--line); }
+
+  #result { display: none; margin-top: 10px; }
+  #result.show { display: block; animation: slideUp 0.55s ease both; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .resultCard { background: #fff; border-radius: 22px 17px 24px 18px; overflow: hidden; box-shadow: var(--shadow-soft); border: 3px solid var(--line); }
+  .resultTop { padding: 64px 20px 28px; text-align: center; background: #fff7df; position: relative; border-bottom: 3px solid var(--line); display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .resultTop:before { content:"MIND MAP"; position:absolute; left:18px; top:18px; font-size:11px; font-weight:950; letter-spacing:1px; background:var(--blue); border:2px solid var(--line); border-radius:999px; padding:4px 9px; transform:rotate(-6deg); }
+  .resultTop:after { content:"↘"; position:absolute; right:22px; bottom:16px; font-size:34px; font-weight:950; transform:rotate(10deg); }
+  .resultTop .name { max-width: calc(100% - 56px); font-size: 13px; line-height:1.35; color: var(--ink); font-weight: 950; background: #fff; display: inline-block; padding: 7px 14px; border-radius: 30px; border: 2px solid var(--line); box-shadow:2px 2px 0 var(--line); white-space: normal; word-break: keep-all; }
+  .resultTop .titleBox { width:100%; max-width: 390px; padding: 12px 16px; background:#fffdf7; border:3px solid var(--line); border-radius: 22px 18px 24px 16px; box-shadow: 3px 3px 0 var(--line); }
+  .resultTop .title { display:block; font-size: clamp(20px, 5.6vw, 30px); font-weight: 950; color: var(--ink); line-height:1.35; white-space: normal; word-break: keep-all; }
+  .resultTop .title span { background: linear-gradient(transparent 58%, var(--pink) 58%); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding: 0 .1em; }
+  .flowScore { margin-top:2px; display: inline-flex; align-items: baseline; gap: 2px; background: #fff; border: 3px solid var(--line); border-radius: 99px; padding: 6px 24px; box-shadow: 4px 4px 0 var(--line); transform: rotate(-2deg); max-width: calc(100% - 48px); }
+  .flowScore b { font-size: 34px; color: var(--ink); font-weight: 950; }
+  .flowScore span { font-size: 13px; color: var(--muted); font-weight: 900; margin-left: 2px; }
+  .resultBody { padding: 18px 14px 26px; display: grid; gap: 15px; background: #fff; }
+  .metric { position: relative; background: #fffdf7; border: 2.5px solid var(--line); border-radius: 18px 14px 20px 13px; padding: 18px; box-shadow: 3px 3px 0 var(--line); }
+  .metric:nth-child(4n+1){ background:#fff7d1; transform:rotate(-.25deg); }
+  .metric:nth-child(4n+2){ background:#eff9ff; transform:rotate(.18deg); }
+  .metric:nth-child(4n+3){ background:#fff0f4; transform:rotate(-.1deg); }
+  .metric:nth-child(4n){ background:#efffed; transform:rotate(.22deg); }
+  .metric:before { content:""; position:absolute; width:32px; height:10px; background:rgba(255,216,107,.9); border:1.7px solid var(--line); top:-8px; left:24px; transform:rotate(-4deg); }
+  .metric .mhead { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+  .metric .mhead b { font-size: 14.5px; color: var(--ink); font-weight: 950; }
+  .metric .value { font-size: 21px; font-weight: 950; color: var(--ink); display:inline; background: linear-gradient(transparent 58%, var(--yellow) 58%); }
+  .metric p { margin: 12px 0 0; color: var(--ink-soft); font-size: 14px; line-height: 1.62; font-weight: 750; }
+  .metric p b { color: var(--ink); font-weight: 950; }
+  .bar { height: 12px; background: #fff; border:2px solid var(--line); border-radius: 99px; overflow: hidden; margin-top: 12px; box-shadow:2px 2px 0 var(--line); }
+  .bar i { display: block; height: 100%; width: 0; border-radius: 99px; background: repeating-linear-gradient(45deg, var(--pink) 0 8px, var(--yellow) 8px 16px); transition: width 1.2s ease-out; }
+  .tarotResult { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+  .miniCard { background: #fff; border: 2px solid var(--line); border-radius: 13px 10px 15px 11px; padding: 12px 6px; text-align: center; box-shadow: 2px 2px 0 var(--line); }
+  .miniCard .ico { font-size: 26px; margin-bottom: 4px; }
+  .miniCard b { display: block; font-size: 13px; color: var(--ink); margin-bottom: 2px; font-weight: 950; }
+  .miniCard span { display: block; font-size: 11px; color: var(--muted); line-height: 1.3; font-weight: 800; }
+  .recommend { display: grid; gap: 7px; margin-top: 12px; }
+  .recItem { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fff; border: 2px solid var(--line); border-radius: 12px; padding: 10px 13px; box-shadow:2px 2px 0 var(--line); }
+  .recItem:nth-child(odd){ background:#fff7d1; }
+  .recItem b { font-size: 13.5px; color: var(--ink); font-weight: 950; }
+  .recItem span { font-size: 12px; color: var(--ink-soft); font-weight: 800; text-align: right; }
+  .nums { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+  .numBall { width: 35px; height: 35px; border-radius: 50%; display: grid; place-items: center; background: var(--yellow); border: 2px solid var(--line); font-weight: 950; color: var(--ink); font-size: 14px; box-shadow: 2px 2px 0 var(--line); }
+  .luckyItem { display: grid; grid-template-columns: 64px 1fr; gap: 14px; align-items: center; }
+  .luckyIcon { width: 64px; height: 64px; border-radius: 16px 13px 18px 12px; display: grid; place-items: center; font-size: 32px; background: var(--purple); border: 2.5px solid var(--line); box-shadow: 3px 3px 0 var(--line); transform: rotate(-3deg); }
+  .luckyItem .luckyName { font-size: 18px; font-weight: 950; color: var(--ink); }
+  .luckyItem .luckyDesc { margin-top: 4px; color: var(--ink-soft); font-size: 13px; line-height: 1.5; font-weight: 750; }
+  .luckyTags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .luckyTags span { padding: 5px 10px; border-radius: 99px; background: #fff; border: 2px solid var(--line); color: var(--ink); font-size: 11px; font-weight: 900; box-shadow:1.5px 1.5px 0 var(--line); }
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+  .saveBtn, .compareBtn { border-radius: 16px; padding: 15px 10px; font-size: 15px; font-weight: 950; cursor: pointer; text-align: center; }
+  .saveBtn { background: var(--yellow); color: var(--ink); }
+  .compareBtn { background: #fff; color: var(--ink); }
+  .compareBtn:hover { background: var(--blue); transform: translate(-1px,-1px); box-shadow:5px 5px 0 var(--line); }
+
+  .modal { position: fixed; inset: 0; background: rgba(22,22,22,0.38); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 999; }
+  .modal.show { display: flex; }
+  .modalIn { max-width: 380px; width: 100%; background: var(--paper); border-radius: 22px 17px 24px 18px; padding: 24px; box-shadow: 7px 7px 0 var(--line); position: relative; border: 3px solid var(--line); }
+  .modalIn h3 { margin: 0 0 16px; font-size: 17px; color: var(--ink); font-weight: 950; }
+  .close { position: absolute; right: 18px; top: 18px; border: 2px solid var(--line); background: var(--pink); color: var(--ink); border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 14px; display: grid; place-items: center; font-weight: 950; box-shadow:2px 2px 0 var(--line); }
+  .compareOut { margin-top: 14px; padding: 14px; border-radius: 14px; background: var(--blue); border: 2px solid var(--line); font-size: 13.5px; line-height: 1.5; color: var(--ink); font-weight: 900; text-align: center; box-shadow:2px 2px 0 var(--line); }
+  .foot { text-align: center; color: var(--muted); font-size: 12px; margin-top: 30px; line-height: 1.6; font-weight: 750; }
+  .hidden { display: none !important; }
+
+  @media (max-width: 420px){
+    .wrap { padding-left: 14px; padding-right: 14px; }
+    .grid2 { grid-template-columns: 1fr; }
+    .deck { grid-template-columns: repeat(3, 1fr); }
+    .actions { grid-template-columns: 1fr; }
+    .resultTop { padding: 68px 14px 24px; gap: 12px; }
+    .resultTop .name { max-width: calc(100% - 36px); font-size: 12px; }
+    .resultTop .titleBox { max-width: 100%; padding: 10px 12px; }
+    .flowScore { transform:none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero" id="mainHero">
+    <div class="orb">🔮</div>
+    <h1>오늘의 금전운</h1>
+    <p class="subtitle">오늘 내 지갑은 어떤 하루를 보낼까?</p>
+    <div class="tagline">MONEY TAROT TODAY</div>
+  </header>
+
+  <section class="panel" id="formPanel">
+    <h2><span class="stepBadge">STEP 1</span> 오늘의 금전운 준비하기</h2>
+    <p class="stepNote">재미로 즐기는 매칭 심리테스트! 정보와 상태를 편하게 입력해 주세요.</p>
+    <div class="grid2">
+      <div><label>이름</label><input id="userName" placeholder="예: 도운" /></div>
+      <div><label>MBTI</label><input id="mbti" placeholder="예: ESTJ" maxlength="4" /></div>
+    </div>
+    <div class="grid2">
+      <div><label>오늘 기분</label><select id="mood"><option>신남</option><option>평온</option><option>피곤</option><option>스트레스</option><option>우울</option><option>자신감 있음</option></select></div>
+      <div><label>오늘의 활동 지역</label><input id="location" placeholder="예: 홍대, 강남" /></div>
+    </div>
+    <label>오늘의 여유 금액</label>
+    <div class="moneyInput"><input id="balance" inputmode="numeric" placeholder="예: 350,000" /><span>원</span></div>
+    
+    <button class="cta" id="go" type="button">행운카드 뽑으러 가기 ✨</button>
+    <button class="ghost" id="randomFill" type="button">⚡ 샘플 데이터로 채우기</button>
+    <div class="err" id="err"></div>
+  </section>
+
+  <section class="panel hidden" id="tarotPanel">
+    <h2><span class="stepBadge">STEP 2</span> 행운카드 3장 뽑기</h2>
+    <p class="stepNote">직감적으로 가장 끌리는 타로 카드를 3장 선택해 보세요!</p>
+    <div class="tarotBox">
+      <div class="tarotHead"><b>오늘의 카드 선택</b><small id="countText">0 / 3 선택됨</small></div>
+      <div class="deck" id="deck"></div>
+      <div class="selectedList" id="selectedList"></div>
+    </div>
+    <button class="cta" id="showResult" type="button">결과 분석 시작 🔍</button>
+    <button class="ghost" id="backToForm" type="button">← 정보 다시 입력</button>
+    <div class="err" id="tarotErr"></div>
+  </section>
+
+  <section id="result"></section>
+  <p class="foot">지갑 사정을 미리 예측해 보는 작은 수호 부적!<br/>과몰입은 피하고 기분 좋은 하루를 만들어 보세요.</p>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modalIn">
+    <button class="close" id="closeModal" type="button">×</button>
+    <h3>👯 우리들의 소비 궁합</h3>
+    <div class="grid2">
+      <div><label>메이트 이름</label><input id="friendName" placeholder="예: 주희" /></div>
+      <div><label>친구 MBTI</label><input id="friendMbti" placeholder="예: ENFP" maxlength="4" /></div>
+    </div>
+    <div><label>친구 오늘 기분</label><select id="friendMood"><option>신남</option><option>평온</option><option>피곤</option><option>스트레스</option><option>우울</option><option>자신감 있음</option></select></div>
+    <button class="cta" id="compareNow" type="button" style="margin-top:16px;">소비 궁합 매칭하기</button>
+    <div class="compareOut" id="compareOut" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  const $ = (id) => document.getElementById(id);
+
+  const TAROT = [
+    {id:"sun",name:"태양",icon:"☀️",type:"income",text:"뜻밖의 입금운과 기회"},
+    {id:"coin",name:"동전",icon:"🪙",type:"saving",text:"작은 돈이 크게 남는 흐름"},
+    {id:"cart",name:"장바구니",icon:"🛒",type:"spend",text:"충동구매 결제 주의"},
+    {id:"map",name:"지도",icon:"🧭",type:"move",text:"이동 지점에서 생기는 기회"},
+    {id:"tower",name:"타워",icon:"🏙️",type:"risk",text:"무계획 지출 과다 위험"},
+    {id:"star",name:"별",icon:"⭐",type:"luck",text:"소액 도전운 및 행운 지수"},
+    {id:"cup",name:"컵",icon:"☕",type:"cafe",text:"식음료·디저트 소비 증가"},
+    {id:"heart",name:"하트",icon:"💗",type:"gift",text:"선물 및 꾸밈비 지출 흐름"},
+    {id:"key",name:"열쇠",icon:"🔑",type:"stable",text:"자산 잠금, 저축에 최적"},
+    {id:"spark",name:"스파크",icon:"⚡",type:"stock",text:"단기 변동성 매매 인지"},
+    {id:"moon",name:"달",icon:"🌙",type:"night",text:"심야 감성 지출 발생 가능"},
+    {id:"clover",name:"클로버",icon:"🍀",type:"lotto",text:"가벼운 이벤트권 재미운"}
+  ];
+  const PLACE_SPEND = ["올리브영","다이소","배달 어플리케이션","핫플레이스 카페거리","무신사","소품샵","편의점","저녁모임","팝업스토어","디자인 문구점","백화점","이마트"];
+  const PLACE_EARN = ["대형 프랜차이즈 카페","상업 오피스 지구","환승 구역 역세권","골목 상권 서편","북동측 중심 번화가","전통 재래 마켓","공유 오피스 라운지","금융 지점 금융권역","주요 환승역 교차점","스터디 플레이스 공간"];
+  const PLACE_ADVICE = {
+    "올리브영": {
+      placeText: "기초템 하나만 사려다가 색조·간식·소품까지 같이 담기 쉬운 구간입니다. 들어가기 전 필요한 품목을 2개 이하로 정해두는 게 잔고 지키기에 유효합니다.",
+      highRisk: "올리브영 부근에서는 ‘이건 필요해 보여’라는 합리화가 빠르게 올라옵니다. 장바구니를 바로 결제하지 말고 매장 밖에서 한 번 더 확인해 보세요.",
+      lowRisk: "올리브영에서는 세일 태그보다 오늘 실제로 다 쓴 품목만 기준으로 보면 무탈합니다.",
+      mission: "올리브영 장바구니 2개 이하로 제한하기"
+    },
+    "다이소": {
+      placeText: "소액이라 괜찮다고 느끼기 쉬운 곳입니다. 천 원 단위 물건이 여러 개 쌓이면 예상보다 결제액이 커질 수 있어요.",
+      highRisk: "다이소에서는 ‘언젠가 쓰겠지’ 아이템이 지출을 키웁니다. 목적 없는 코너 구경은 짧게 끊는 게 좋아요.",
+      lowRisk: "다이소에서는 생활 필수품만 체크하면 작은 만족감으로 끝낼 수 있습니다.",
+      mission: "다이소 구매 전 총액 먼저 계산하기"
+    },
+    "배달 어플리케이션": {
+      placeText: "배달비·최소주문금액·사이드 추가가 한 번에 붙기 쉬운 구간입니다. 주문 전 냉장고와 편의점 대체안을 먼저 떠올리면 지출을 줄일 수 있어요.",
+      highRisk: "배달 어플리케이션에서는 메뉴보다 쿠폰과 최소주문금액이 결정을 흔들 수 있습니다. 결제 전 20분만 미뤄보세요.",
+      lowRisk: "배달 어플리케이션은 단품 주문 원칙만 지켜도 지출을 크게 키우지 않을 수 있습니다.",
+      mission: "배달앱 알림 끄고 20분 뒤 다시 보기"
+    },
+    "핫플레이스 카페거리": {
+      placeText: "음료 한 잔으로 시작해 디저트·굿즈·사진용 소비로 이어지기 쉬운 동선입니다. 방문 전 카페 예산을 먼저 정해두면 좋아요.",
+      highRisk: "핫플레이스 카페거리에서는 분위기 지출이 강하게 올라옵니다. 메뉴판을 보기 전 상한 금액부터 정하세요.",
+      lowRisk: "핫플레이스 카페거리는 디저트 추가만 피하면 기분 전환선에서 마무리됩니다.",
+      mission: "카페 예산 상한선 먼저 정하기"
+    },
+    "무신사": {
+      placeText: "추천 상품과 랭킹 탭을 따라가다 보면 원래 보던 품목보다 결제 범위가 넓어질 수 있습니다. 위시리스트 저장까지만 해도 충분해요.",
+      highRisk: "무신사에서는 할인율보다 ‘지금 당장 필요한 옷인지’가 핵심입니다. 바로구매 대신 찜하기로 넘겨보세요.",
+      lowRisk: "무신사는 장바구니 보관 후 내일 다시 봐도 사고 싶을 때만 결제하면 안정적입니다.",
+      mission: "무신사 바로구매 대신 찜하기만 하기"
+    },
+    "소품샵": {
+      placeText: "귀여운 물건이 많아 실용성보다 감정이 먼저 움직이기 쉬운 장소입니다. 비슷한 물건을 이미 갖고 있는지 떠올려 보세요.",
+      highRisk: "소품샵에서는 ‘작고 귀여우니까 괜찮아’가 누적 지출로 이어집니다. 사진만 찍고 한 바퀴 더 돈 뒤 결정하세요.",
+      lowRisk: "소품샵에서는 하나만 고르는 원칙을 세우면 만족감과 잔고를 같이 지킬 수 있습니다.",
+      mission: "소품샵에서는 한 개만 고르기"
+    },
+    "편의점": {
+      placeText: "커피·간식·야식처럼 작은 소비가 반복되기 쉬운 곳입니다. 들어가기 전 살 품목을 한 가지만 정하면 좋아요.",
+      highRisk: "편의점에서는 1+1과 신상 간식이 소비를 부추길 수 있습니다. 계산대 앞 추가 구매를 특히 조심하세요.",
+      lowRisk: "편의점은 목적 구매만 하면 오늘 지출에 큰 타격은 없습니다.",
+      mission: "편의점 입장 전 살 것 하나만 정하기"
+    },
+    "저녁모임": {
+      placeText: "식사 후 카페·2차·택시비까지 이어지기 쉬운 구간입니다. 귀가 시간과 2차 여부를 미리 정하면 지출이 안정됩니다.",
+      highRisk: "저녁모임에서는 분위기에 맞춰 추가 결제가 생기기 쉽습니다. 2차 제안에는 한 번 쉬어가는 답을 준비하세요.",
+      lowRisk: "저녁모임은 1차 예산만 정해도 무리 없이 즐길 수 있습니다.",
+      mission: "저녁모임 2차 예산 미리 정하기"
+    },
+    "팝업스토어": {
+      placeText: "한정판·현장 특전·굿즈 세트가 결정을 빠르게 만들 수 있는 장소입니다. 구매 전 가장 갖고 싶은 1순위만 남겨보세요.",
+      highRisk: "팝업스토어에서는 ‘오늘 아니면 못 사’라는 감정이 강해집니다. 세트 구매보다 단품 1개 기준으로 다시 보세요.",
+      lowRisk: "팝업스토어는 1순위 굿즈만 고르면 만족도는 높고 지출은 낮출 수 있습니다.",
+      mission: "팝업스토어 1순위 굿즈만 구매하기"
+    },
+    "디자인 문구점": {
+      placeText: "펜·스티커·노트처럼 작고 예쁜 물건이 반복 구매로 이어질 수 있습니다. 이미 가진 문구류를 떠올리면 지출 방어가 쉬워요.",
+      highRisk: "디자인 문구점에서는 ‘쓸 데가 있겠지’라는 생각이 늘어날 수 있습니다. 오늘 바로 쓸 물건만 고르세요.",
+      lowRisk: "디자인 문구점은 필요한 문구 1종만 사면 기분 좋은 소비로 끝납니다.",
+      mission: "문구류는 오늘 바로 쓸 것만 사기"
+    },
+    "백화점": {
+      placeText: "브랜드 진열과 프로모션 혜택이 구매 단가를 올리기 쉬운 공간입니다. 둘러보기와 구매를 분리하면 지출을 줄일 수 있어요.",
+      highRisk: "백화점에서는 할인 혜택보다 최종 결제액이 중요합니다. 매장 직원 추천은 한 번 보류하고 이동해 보세요.",
+      lowRisk: "백화점은 필요한 매장만 방문하면 과소비 가능성이 낮아집니다.",
+      mission: "백화점에서는 구매 전 매장 밖으로 한 번 나가기"
+    },
+    "이마트": {
+      placeText: "장보기 동선에서 묶음상품과 행사상품이 예산을 흔들 수 있습니다. 필요한 식재료 리스트 중심으로 움직이는 게 좋아요.",
+      highRisk: "이마트에서는 대용량·행사상품이 지출을 키울 수 있습니다. 보관 가능 여부부터 확인하세요.",
+      lowRisk: "이마트는 장보기 리스트만 지키면 생활비 안에서 안정적으로 마무리됩니다.",
+      mission: "이마트 장보기 리스트 밖 상품 보류하기"
+    }
+  };
+  const REGIONS = ["성수","을지로","홍대","강남","여의도","잠실","연남","송도","부평","판교","합정","한남","이태원","관악산","에버랜드","63빌딩","롯데타워","망원"];
+  const LUCKY_ITEMS = [
+    {name:"빨간색 볼펜", icon:"🖊️", tags:["결제 전 체크", "충동 차단", "기록운 상승"], desc:"사고 싶은 항목을 즉시 결제하기보다 먼저 적어 보세요. 불필요한 지출 욕구가 차분하게 가라앉습니다."},
+    {name:"거북이 키링", icon:"🐢", tags:["느린 소비", "잔고 보호", "신중함"], desc:"빠르게 결정되는 결제 흐름을 속도를 늦춰, 진짜 필요한 물건인지를 유효하게 다시 묻게 합니다."},
+    {name:"노란색 동전지갑", icon:"👛", tags:["현금 감각", "소액 통제", "지갑운"], desc:"실질적인 자금 흐름에 관한 현실감을 자극하여 편의점이나 커피 등 미세 고정지출을 줄여줍니다."},
+    {name:"투명 파우치", icon:"🫧", tags:["가시화", "중복구매 방지", "정리운"], desc:"내 소지품들을 한눈에 스캔할 수 있게 만들어, 이미 가지고 있는 소모품을 또 구매하는 실수를 막습니다."},
+    {name:"초록색 머리끈", icon:"🟢", tags:["마음 안정", "예산 방어", "페이스 조절"], desc:"스트레스성 홧김 지출의 고리를 끊어줍니다. 손목에 가까이 지참하는 것만으로 심리적 브레이크가 걸립니다."},
+    {name:"체크무늬 손수건", icon:"⬜", tags:["실용성", "낭비 차단", "생활운"], desc:"과시형 지출 유혹을 덜어내고 실용성에 초점을 맞춥니다. 장기적으로 후회 없는 선택을 유도합니다."},
+    {name:"파란색 메모지", icon:"📝", tags:["예산 메모", "냉정 판단", "계획 소비"], desc:"구매하기 전 '필요'와 '욕구'의 차이를 스스로 냉정하게 메모로 검증할 수 있는 차분함을 더해줍니다."},
+    {name:"은색 클립", icon:"📎", tags:["고정력", "영수증 보관", "새는 돈 봉합"], desc:"지출 영수증을 흩어지지 않게 고정해, 오늘 나의 자산 흐름 방향을 직접 인지하게 만드는 효과를 줍니다."}
+  ];
+
+  let selected = [];
+  let lastResult = null;
+  let pendingData = null;
+
+  function hash(str){
+    let h = 0;
+    for(let i=0;i<str.length;i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+    return h;
+  }
+
+  function pick(arr, seed, offset=0){ return arr[(seed + offset) % arr.length]; }
+  function formatWon(n){ return n.toLocaleString('ko-KR') + "원"; }
+  function cleanMoney(v){ return Number(String(v).replace(/[^0-9]/g, "")) || 0; }
+  function getPlaceAdvice(place, spendRisk){
+    const data = PLACE_ADVICE[place] || {
+      placeText: `${place} 근처에서는 계획에 없던 결제가 생기기 쉽습니다. 방문 전 필요한 항목과 예산을 먼저 정해두면 잔고를 지키기 좋습니다.`,
+      highRisk: `${place} 부근에서는 소비 유혹이 강하게 올라옵니다. 바로 결제하지 말고 잠시 자리를 옮겨 다시 판단해 보세요.`,
+      lowRisk: `${place}에서는 필요한 항목만 고르면 무리 없는 소비로 마무리할 수 있습니다.`,
+      mission: `${place} 방문 전 예산 상한선 정하기`
+    };
+    return {
+      spendAdvice: data.placeText,
+      riskDetail: spendRisk > 70 ? data.highRisk : data.lowRisk,
+      actionMission: data.mission
+    };
+  }
+  function escapeHTML(v){
+    return String(v).replace(/[&<>'"]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+  }
+  function isValidMbti(v){ return /^[EI][SN][TF][JP]$/.test(v); }
+  function safeFileName(v){ return String(v).replace(/[\/:*?"<>|]/g, '_').slice(0, 40) || 'user'; }
+
+  function init(){
+    $('mbti').value = "ESTJ";
+    $('friendMbti').value = "ENFP";
+
+    [$('mbti'), $('friendMbti')].forEach(input => {
+      input.addEventListener('input', (e) => {
+        e.target.value = e.target.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4);
+      });
+    });
+
+    TAROT.forEach((c, i) => {
+      $('deck').insertAdjacentHTML('beforeend', `<button class="tcard" type="button" data-i="${i}" data-icon="${c.icon}" aria-label="${c.name} 카드"></button>`);
+    });
+
+    $('deck').querySelectorAll('.tcard').forEach(btn => {
+      btn.addEventListener('click', () => toggleCard(Number(btn.dataset.i), btn));
+    });
+
+    $('go').addEventListener('click', () => {
+      const data = validateUserInfo();
+      if(data) showTarotStep(data);
+    });
+
+    $('showResult').addEventListener('click', () => {
+      $('tarotErr').textContent = '';
+      if(!pendingData){
+        const data = validateUserInfo();
+        if(!data) return;
+        pendingData = data;
+      }
+      if(selected.length !== 3){
+        $('tarotErr').textContent = '가장 시선이 가는 카드 3장을 골라주셔야 운세가 완성됩니다!';
+        return;
+      }
+      renderResult(calcResult(pendingData));
+    });
+
+    $('balance').addEventListener('input', (e) => {
+      const value = cleanMoney(e.target.value);
+      e.target.value = value ? value.toLocaleString('ko-KR') : '';
+    });
+
+    $('randomFill').addEventListener('click', fillExample);
+    $('backToForm').addEventListener('click', () => {
+      $('tarotPanel').classList.add('hidden');
+      $('formPanel').classList.remove('hidden');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+    $('closeModal').addEventListener('click', () => $('modal').classList.remove('show'));
+    $('modal').addEventListener('click', (e) => {
+      if(e.target === $('modal')) $('modal').classList.remove('show');
+    });
+    $('compareNow').addEventListener('click', compareFriend);
+  }
+
+  function toggleCard(i, btn){
+    if(selected.includes(i)){
+      selected = selected.filter(x => x !== i);
+      btn.classList.remove('selected');
+    }else{
+      if(selected.length >= 3) return;
+      selected.push(i);
+      btn.classList.add('selected');
+    }
+    renderSelected();
+  }
+
+  function renderSelected(){
+    $('countText').textContent = `${selected.length} / 3 선택됨`;
+    $('selectedList').innerHTML = selected.map(i => `<span class="chip">${TAROT[i].icon} ${TAROT[i].name}</span>`).join("");
+  }
+
+  function validateUserInfo(){
+    $('err').textContent = '';
+    const name = $('userName').value.trim();
+    const currentPlace = $('location').value.trim();
+    const balance = cleanMoney($('balance').value);
+    const mbti = $('mbti').value.trim().toUpperCase();
+
+    if(!name){ $('err').textContent = '이름을 입력해 주세요.'; return null; }
+    if(!isValidMbti(mbti)){ $('err').textContent = 'MBTI 4자리를 정확히 입력해 주세요. (예: ESTJ)'; return null; }
+    if(!currentPlace){ $('err').textContent = '오늘의 활동 지역을 적어주세요.'; return null; }
+    if(!balance){ $('err').textContent = '여유 금액을 설정해 주세요.'; return null; }
+
+    return { name, mbti, mood: $('mood').value, location: currentPlace, balance };
+  }
+
+  function showTarotStep(data){
+    pendingData = data;
+    $('tarotErr').textContent = '';
+    $('formPanel').classList.add('hidden');
+    $('tarotPanel').classList.remove('hidden');
+    $('result').classList.remove('show');
+    $('result').innerHTML = '';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function calcResult(data){
+    const cards = selected.map(i => TAROT[i]);
+    const seed = hash(data.name + data.mbti + data.mood + data.location + data.balance + cards.map(c => c.id).join(""));
+    const bal = cleanMoney(data.balance);
+    const moodRisk = {"신남":23,"평온":8,"피곤":17,"스트레스":30,"우울":26,"자신감 있음":18}[data.mood] || 12;
+    const cardRisk = cards.reduce((a,c) => a + ({spend:22,risk:25,cafe:14,gift:18,night:17,stock:15,lotto:8,income:-8,saving:-15,stable:-16,move:4,luck:-2}[c.type] || 0), 0);
+    const mbtiRisk = (data.mbti.includes('E') ? 8 : 2) + (data.mbti.includes('P') ? 12 : 3) + (data.mbti.includes('F') ? 7 : 2);
+    const balanceFactor = bal < 100000 ? 8 : bal < 500000 ? 15 : bal < 2000000 ? 22 : 28;
+    const spendRisk = Math.max(12, Math.min(96, 35 + moodRisk + cardRisk + mbtiRisk - balanceFactor));
+    const base = Math.max(12000, Math.min(180000, Math.round((bal * 0.035) + (spendRisk * 850) + (seed % 22000))));
+    const min = Math.round(base * 0.72 / 1000) * 1000;
+    const max = Math.round(base * 1.35 / 1000) * 1000;
+    const incomeDir = pick(["북서쪽","동쪽","남동쪽","서쪽","북동쪽","남쪽"], seed, 1);
+    const spendDir = pick(["남서쪽 공간","동쪽 인근","밀집 상권가","역세권 출구 부근","온라인 장바구니","골목 마켓 라인"], seed, 2);
+    const spendPlace = pick(PLACE_SPEND, seed, 4);
+    const earnPlace = pick(PLACE_EARN, seed, 5);
+
+    // === [수정 영역 완료] 행운 지역 3개 중복 없이 추출 ===
+    const finalRegions = [];
+    let regionOffset = 3;
+    while(finalRegions.length < 3){
+      const region = pick(REGIONS, seed, regionOffset);
+      if(!finalRegions.includes(region)) finalRegions.push(region);
+      regionOffset += 7;
+    }
+
+    const incomeDetail = `${incomeDir} 방향의 흐름이 좋은 날입니다. 특히 이 기운은 ${finalRegions.join(', ')} 세 곳의 공간과 강하게 연결되어 있으며, 주변의 ${earnPlace} 장소를 거닐 때 긍정적인 자극이나 뜻밖의 혜택을 마주할 확률이 높아집니다.`;
+    // ==================================================
+
+    let recScores = {"로또":40,"스피또":38,"연금복권":42,"주식":36,"적금":45};
+    cards.forEach(c => {
+      if(c.type === 'lotto'){ recScores['로또'] += 22; recScores['연금복권'] += 12; }
+      if(c.type === 'stock'){ recScores['주식'] += 24; }
+      if(c.type === 'saving' || c.type === 'stable'){ recScores['적금'] += 28; recScores['연금복권'] += 8; }
+      if(c.type === 'luck'){ recScores['스피또'] += 18; recScores['로또'] += 13; }
+      if(c.type === 'risk' || c.type === 'spend'){ recScores['적금'] += 12; recScores['주식'] -= 10; }
+    });
+    if(data.mood === '스트레스' || data.mood === '우울'){ recScores['적금'] += 15; recScores['주식'] -= 9; }
+
+    const bestInvest = Object.entries(recScores).sort((a,b) => b[1] - a[1])[0][0];
+    const nums = [];
+    let s = seed;
+    while(nums.length < 6){
+      const n = (s % 45) + 1;
+      if(!nums.includes(n)) nums.push(n);
+      s = Math.floor(s / 7) + 97;
+    }
+    nums.sort((a,b) => a - b);
+
+    const speedAmount = "가볍게 한두 장 지참하기";
+    const stockWindow = spendRisk > 70 ? "오늘은 섣부른 진입 대신 흐름 관망 추천" : "트렌드 파악 목적의 가벼운 대응 위주 타이밍";
+    const score = Math.max(28, Math.min(95, 100 - spendRisk + Math.round(recScores[bestInvest] / 3) + (seed % 13)));
+    const title = spendRisk > 74 ? "방어가 급선무! 무방비 오픈 지갑" : spendRisk > 55 ? "지출 유혹이 밀려오는 소소한 낭비 주의보" : spendRisk > 35 ? "자금의 순환이 순탄하고 평온한 하루" : "철벽 수비력 완비! 스마트 자산 차단일";
+    const tone = spendRisk > 74 ? "충동 결제 확률이 대폭 오르는 날이니 한 템포 조절이 필요합니다. 세세한 소비들이 뭉치면 순식간에 큰 지출로 커져요." : spendRisk > 55 ? "사고 싶어지는 소망과 아끼고 싶은 현실 감각이 팽팽한 줄다리기를 시작합니다. 장바구니에 담고 내일 다시 조우해 보세요." : spendRisk > 35 ? "설정 범위 안에서 합리적인 수준의 통제가 부드럽게 이뤄집니다. 무리한 약속만 피하면 잔고 방어는 어렵지 않아요." : "지갑 방어 모드가 견고하게 작동하는 럭키한 타이밍이에요. 과장 광고나 유혹 스팟을 지혜롭게 차단할 기운이 가득합니다.";
+    const placeAdvice = getPlaceAdvice(spendPlace, spendRisk);
+    const riskDetail = placeAdvice.riskDetail;
+    const spendAdvice = placeAdvice.spendAdvice;
+    
+    const cardSummary = cards.map(c => `${c.icon}${c.name}`).join(', ');
+    const actionMission = placeAdvice.actionMission;
+    const luckyItem = pick(LUCKY_ITEMS, seed, spendRisk > 70 ? 7 : 2);
+
+    return {seed,cards,spendRisk,min,max,incomeDir,spendDir,finalRegions,spendPlace,earnPlace,bestInvest,nums,speedAmount,stockWindow,score,title,recScores,data,tone,riskDetail,spendAdvice,incomeDetail,cardSummary,actionMission,luckyItem};
+  }
+
+  function renderResult(r){
+    lastResult = r;
+    const safeName = escapeHTML(r.data.name);
+    
+    $('formPanel').classList.add('hidden');
+    $('tarotPanel').classList.add('hidden');
+    $('mainHero').classList.add('hidden');
+
+    const cardsHtml = r.cards.map(c => `
+      <div class="miniCard">
+        <div class="ico">${c.icon}</div>
+        <b>${c.name}</b>
+        <span>${c.text}</span>
+      </div>`).join('');
+
+    const sorted = Object.entries(r.recScores).sort((a,b) => b[1] - a[1]);
+    const recHtml = sorted.map(([k,v],idx) => {
+      const desc = {"로또":"기분 전환 삼아 한 줄만 초이스","스피또":"동전으로 긁는 작은 이색 재미","연금복권":"미래 안정을 꿈꾸는 잔잔한 희망","주식":r.stockWindow,"적금":"오늘 잔고 수호율 1위 지킴 장치"}[k];
+      return `<div class="recItem"><b>${idx+1}. ${k}</b><span>${desc}</span></div>`;
+    }).join('');
+
+    $('result').innerHTML = `
+      <div class="resultCard">
+        <div class="resultTop">
+          <div class="name">${safeName}님의 오늘 금전운 리포트</div>
+          <div class="titleBox"><div class="title"><span>${r.title}</span></div></div>
+          <div class="flowScore"><b>${r.score}</b><span>/ 100점</span></div>
+        </div>
+        <div class="resultBody">
+          <div class="metric">
+            <div class="mhead"><b>📊 지출 레이더 및 예상 비용</b><span class="chip" style="background:var(--rose-light); border-color:rgba(255,107,139,0.2); color:var(--rose);">소비 조심 지수 ${r.spendRisk}%</span></div>
+            <div class="value">${formatWon(r.min)} ~ ${formatWon(r.max)}</div>
+            <div class="bar"><i data-w="${r.spendRisk}"></i></div>
+            <p><b>종합 진단</b> — ${r.tone}</p>
+          </div>
+          
+          <!-- === [수정 영역 완료] 행운 지역 3개 배지 UI 스타일 연출 === -->
+          <div class="metric">
+            <div class="mhead"><b>🧭 나를 이끄는 행운 스팟</b></div>
+            <div class="luckyTags" style="margin-top: 4px; margin-bottom: 12px;">
+              ${r.finalRegions.map(reg => `<span style="font-size: 14px; font-weight: 800; color: var(--primary); background: var(--primary-light); border-color: rgba(139,92,246,0.2); padding: 6px 14px;">📍 ${escapeHTML(reg)}</span>`).join('')}
+            </div>
+            <p>${r.incomeDetail}</p>
+          </div>
+          <!-- ======================================================= -->
+          
+          <div class="metric">
+            <div class="mhead"><b>💸 자금이 증발하기 쉬운 장소</b></div>
+            <div class="value" style="color:var(--rose); font-size:18px;">${r.spendPlace}</div>
+            <p>${r.spendAdvice}</p>
+          </div>
+
+          <div class="metric">
+            <div class="mhead"><b>⚠️ 오늘의 지갑 방어 미션</b></div>
+            <p><b>요주의 구간</b> — ${r.riskDetail}<br/><b style="color:var(--primary);">세이빙 미션</b> — ${r.actionMission}</p>
+          </div>
+
+          <div class="metric">
+            <div class="mhead"><b>🧩 오늘의 지갑 지킴이템</b></div>
+            <div class="luckyItem">
+              <div class="luckyIcon">${r.luckyItem.icon}</div>
+              <div>
+                <div class="luckyName">${r.luckyItem.name}</div>
+                <div class="luckyDesc">${r.luckyItem.desc}</div>
+              </div>
+            </div>
+            <div class="luckyTags">${r.luckyItem.tags.map(t => `<span>#${t}</span>`).join('')}</div>
+          </div>
+
+          <div class="metric">
+            <div class="mhead"><b>🎴 오늘의 카드</b></div>
+            <div class="tarotResult">${cardsHtml}</div>
+            <p style="font-size:12px; color:var(--text-muted); text-align:center;">매칭 조합: ${r.cardSummary}</p>
+          </div>
+
+          <div class="metric">
+            <div class="mhead"><b>📈 오늘의 투자 추천</b></div>
+            <div class="recommend">${recHtml}</div>
+          </div>
+
+          <div class="metric">
+            <div class="mhead"><b>🔮오늘의 행운 번호</b></div>
+            <div class="nums">${r.nums.map(n => `<span class="numBall">${n}</span>`).join('')}</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="actions">
+        <button class="saveBtn" type="button" id="saveImg">결과 이미지 보관</button>
+        <button class="compareBtn" type="button" id="openCompare">친구 연동 궁합</button>
+      </div>
+      <button class="ghost" id="rollbackSystem" type="button" style="margin-top:16px;">✨ 테스트 다시 해보기</button>
+    `;
+
+    $('result').classList.add('show');
+    
+    requestAnimationFrame(() => {
+      $('result').querySelectorAll('.bar i').forEach(i => i.style.width = i.dataset.w + '%');
+    });
+    
+    window.scrollTo({top: 0, behavior: 'smooth'});
+
+    $('saveImg').addEventListener('click', () => saveCanvas(r));
+    $('openCompare').addEventListener('click', () => $('modal').classList.add('show'));
+    
+    $('rollbackSystem').addEventListener('click', () => {
+      $('result').classList.remove('show');
+      $('result').innerHTML = '';
+      $('formPanel').classList.remove('hidden');
+      $('mainHero').classList.remove('hidden');
+      selected = [];
+      document.querySelectorAll('.tcard').forEach(b => b.classList.remove('selected'));
+      renderSelected();
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  }
+
+  function saveCanvas(r){
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 800; canvas.height = 1100;
+
+    ctx.fillStyle = '#fff3f3'; ctx.fillRect(0,0,800,1100);
+    
+    ctx.fillStyle = '#ffffff';
+    roundRect(ctx, 40, 40, 720, 1020, 30); ctx.fill();
+
+    ctx.fillStyle = '#8b5cf6'; ctx.textAlign = 'center'; ctx.font = 'bold 34px sans-serif';
+    ctx.fillText(`${r.data.name}님의 오늘 금전운 리포트`, 400, 120);
+    
+    ctx.fillStyle = '#1e1442'; ctx.font = 'bold 42px sans-serif';
+    ctx.fillText(r.title, 400, 200);
+    
+    ctx.fillStyle = '#8b5cf6'; ctx.font = 'bold 75px sans-serif';
+    ctx.fillText(`${r.score}점`, 400, 320);
+    
+    ctx.fillStyle = '#2c2549'; ctx.font = 'bold 30px sans-serif';
+    ctx.fillText(`지출 구간: ${formatWon(r.min)} ~ ${formatWon(r.max)}`, 400, 440);
+    
+    ctx.fillStyle = '#797296'; ctx.font = '24px sans-serif';
+    // [이미지 저장 기능 동기화 수정보완] 3개 지역을 캔버스 이미지 내부에도 동일하게 출력하도록 세팅
+    ctx.fillText(`행운 지역: ${r.finalRegions.join(', ')} (${r.incomeDir} 흐름)`, 400, 520);
+    ctx.fillText(`지출 방어구역: ${r.spendPlace}`, 400, 580);
+    ctx.fillText(`추천 행운템: ${r.luckyItem.name}`, 400, 640);
+    
+    ctx.fillStyle = '#8b5cf6'; ctx.font = 'bold 26px sans-serif';
+    ctx.fillText(`행운수: ${r.nums.join('  ')}`, 400, 715);
+
+    ctx.fillStyle = '#e3ddf4'; ctx.fillRect(80, 775, 640, 2);
+
+    r.cards.forEach((c, i) => {
+      const x = 180 + i * 220;
+      ctx.fillStyle = '#fafafd';
+      roundRect(ctx, x-80, 815, 160, 190, 14); ctx.fill();
+      ctx.font = '48px sans-serif'; ctx.fillText(c.icon, x, 885);
+      ctx.fillStyle = '#1e1442'; ctx.font = 'bold 24px sans-serif'; ctx.fillText(c.name, x, 935);
+      ctx.fillStyle = '#797296'; ctx.font = '16px sans-serif';
+      ctx.fillText(c.text, x, 975);
+    });
+
+    const a = document.createElement('a');
+    a.download = `${safeFileName(r.data.name)}_금전운_리포트.png`;
+    a.href = canvas.toDataURL('image/png'); a.click();
+  }
+
+  function roundRect(ctx,x,y,w,h,r){
+    ctx.beginPath(); ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+r,y,r);
+    ctx.closePath();
+  }
+
+  function fillExample(){
+    $('userName').value = '다은';
+    $('mbti').value = 'ESTJ';
+    $('mood').value = '스트레스';
+    $('location').value = '인천 송도';
+    $('balance').value = '350,000';
+    selected = [];
+    document.querySelectorAll('.tcard').forEach(b => b.classList.remove('selected'));
+    [0,3,10].forEach(i => {
+      selected.push(i);
+      document.querySelector(`.tcard[data-i="${i}"]`).classList.add('selected');
+    });
+    renderSelected();
+    const data = validateUserInfo();
+    if(data) showTarotStep(data);
+  }
+
+  function compareFriend(){
+    if(!lastResult) return;
+    const f = $('friendName').value.trim() || '메이트';
+    const friendMbti = $('friendMbti').value.trim().toUpperCase();
+    if(!isValidMbti(friendMbti)){
+      $('compareOut').style.display = 'block';
+      $('compareOut').textContent = '친구 MBTI를 4자리로 정확히 입력해 주세요. 예: ENFP';
+      return;
+    }
+    const seed = hash(f + friendMbti + $('friendMood').value);
+    const fRisk = Math.max(15, Math.min(95,
+      35 + ({"신남":20,"평온":8,"피곤":16,"스트레스":29,"우울":24,"자신감 있음":17}[$('friendMood').value] || 10)
+      + (friendMbti.includes('P') ? 14 : 4) + (seed % 18)
+    ));
+    const mine = lastResult.spendRisk;
+    const msg = mine > fRisk
+      ? `🚨 오늘은 내가 ${f}님보다 지갑 수비력이 낮아요! 동행 시 친구에게 지출 제어권을 일부 위임하세요.`
+      : mine < fRisk
+        ? `⚠️ 오늘은 ${f}님의 소비 욕망 레벨이 상당합니다! 옆에서 과도한 지름신을 부드럽게 제어해 주는 브레이커 역할을 자처해 보세요.`
+        : `🤝 두 분의 잔고 방어 성향이 완벽히 동기화된 하루네요! 함께 움직이면 시너지가 나서 불필요한 과소비를 철벽 방어할 수 있어요.`;
+    $('compareOut').style.display = 'block'; $('compareOut').textContent = msg;
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>
